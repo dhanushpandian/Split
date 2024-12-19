@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -43,6 +43,101 @@
         </div>
     </nav>
 </body>
-</html>
+</html> -->
+
 
 {{room_id}} Entered
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Session {{ room_id }}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 font-sans">
+    <nav class="bg-white border-gray-200 dark:bg-gray-900">
+        <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+            <a href="{{ url_for('index') }}" class="flex items-center space-x-3 rtl:space-x-reverse">
+                <img src="{{ url_for('static', filename='images/logo.png') }}" class="h-10" alt="Split Logo" />
+                <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Split</span>
+            </a>
+        </div>
+    </nav>
+
+    <div class="container mx-auto mt-8">
+        <h1 class="text-2xl font-semibold text-center">Session {{ room_id }}</h1>
+
+        <!-- Add User Form -->
+        <form action="{{ url_for('add_user', room_id=room_id) }}" method="post" class="mt-8">
+            <div class="mb-4">
+                <label for="name" class="block text-sm font-medium text-gray-700">User Name</label>
+                <input type="text" id="name" name="name" required class="mt-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm">
+            </div>
+            <div class="text-center">
+                <button type="submit" class="bg-green-500 text-white px-6 py-3 rounded-lg text-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-opacity-50">Add User</button>
+            </div>
+        </form>
+
+        <!-- Add Expense Form -->
+        <form action="{{ url_for('add_expense', room_id=room_id) }}" method="post" class="mt-8">
+            <div class="mb-4">
+                <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
+                <input type="text" id="description" name="description" required class="mt-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm">
+            </div>
+
+            <div class="mb-4">
+                <label for="amount" class="block text-sm font-medium text-gray-700">Amount</label>
+                <input type="number" step="0.01" id="amount" name="amount" required class="mt-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm">
+            </div>
+
+            <div class="mb-4">
+                <label for="paid_by" class="block text-sm font-medium text-gray-700">Paid By</label>
+                <select id="paid_by" name="paid_by" required class="mt-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm">
+                    {% for user in users %}
+                    <option value="{{ user.id }}">{{ user.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="mb-4">
+                <label for="participants" class="block text-sm font-medium text-gray-700">Participants</label>
+                <select multiple id="participants" name="participants" required class="mt-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm">
+                    {% for user in users %}
+                    <option value="{{ user.id }}">{{ user.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="text-center">
+                <button type="submit" class="bg-blue-500 text-white px-6 py-3 rounded-lg text-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50">Add Expense</button>
+            </div>
+        </form>
+
+        <div class="mt-8">
+            <h2 class="text-xl font-semibold">Expenses</h2>
+            <table class="min-w-full divide-y divide-gray-200 mt-4">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Paid By</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    {% for expense in expenses %}
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ expense.description }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ expense.amount }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ expense.paid_by }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ expense.created_at }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
